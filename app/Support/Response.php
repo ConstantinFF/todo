@@ -22,4 +22,9 @@ class Response
     {
         return $this->toJson();
     }
+
+    public function body()
+    {
+        return $this->body;
+    }
 }

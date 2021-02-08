@@ -1,0 +1,21 @@
+{
+    "name": "konstantin/todo",
+    "type": "project",
+    "minimum-stability": "dev",
+    "require": {
+    },
+    "require-dev": {
+        "symfony/var-dumper": "9999999-dev"
+    },
+    "autoload": {
+        "files": [
+        ],
+        "psr-4": {
+            "Todo\\": "app/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+        }
+    }
+}

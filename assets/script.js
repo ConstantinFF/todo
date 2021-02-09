@@ -17,6 +17,14 @@ class Model {
     }
 
     /**
+     * Bind callback on api error.
+     * @param {Function} callback 
+     */
+    bindHandleError(callback) {
+        this.onError = callback;
+    }
+
+    /**
      * Execute list changed callback.
      * @param {Array} todos 
      */
@@ -28,9 +36,8 @@ class Model {
      * Get list of todos and set them into the model.
      */
     async getTodos() {
-        const response = await fetch('/to-do-list/backend');
-        const data = await response.json();
-        this.todos = data.data;
+        const response = await this.api('/to-do-list/backend');
+        this.todos = response.data;
 
         this._commit(this.todos);
     }
@@ -40,15 +47,29 @@ class Model {
      * @param {Object} form 
      */
     async addTodo(form) {
-        const response = await fetch('/to-do-list/backend', {
+        const response = await this.api('/to-do-list/backend', {
             method: 'POST',
             body: new FormData(form),
         });
 
-        const data = await response.json();
-        this.todos.push(data);
-
+        this.todos.push(response);
         this._commit(this.todos);
+    }
+
+    /**
+     * Make api request and handle errors.
+     * @param {Array} args 
+     */
+    async api(...args) {
+        const response = await fetch(...args);
+        const data = await response.json();
+
+        if (response.status >= 400 && response.status < 600) {
+            this.onError(data.error);
+            throw new Error(data.error);
+        }
+
+        return data;
     }
 
     /**
@@ -56,10 +77,9 @@ class Model {
      * @param {number} id 
      */
     async deleteTodo(id) {
-        const response = await fetch(`/to-do-list/backend/${id}`, {
+        await this.api(`/to-do-list/backend/${id}`, {
             method: 'DELETE',
         });
-        const data = await response.json();
 
         this.todos = this.todos.filter(todo => todo.id != id);
         this._commit(this.todos);
@@ -71,12 +91,10 @@ class Model {
      * @param {boolean} id 
      */
     async setCompletedTodo(id, is_completed) {
-        const response = await fetch(`/to-do-list/backend/${id}`, {
+        await this.api(`/to-do-list/backend/${id}`, {
             method: 'PUT',
             body: JSON.stringify({ is_completed }),
         });
-
-        await response.json();
 
         const todoIndex = this.todos.findIndex((todo => todo.id == id));
 
@@ -89,11 +107,10 @@ class Model {
      * @param {Array<number>} todosOrder 
      */
     async sortTodo(todosOrder) {
-        const response = await fetch('/to-do-list/backend', {
+        await this.api('/to-do-list/backend', {
             method: 'PUT',
             body: JSON.stringify({ sort: todosOrder }),
         });
-        await response.json();
 
         this.todos = this.todos.sort((a, b) => todosOrder.indexOf(a.id) - todosOrder.indexOf(b.id));
         this._commit(this.todos);
@@ -110,6 +127,7 @@ class View {
         this.todoList = this.getElement('#todos');
         this.form = this.getElement('#add-todo');
         this.input = this.form.querySelector('input');
+        this.error = this.getElement('#error');
 
         this.selectedDrag = null;
     }
@@ -202,6 +220,20 @@ class View {
     }
 
     /**
+     * Display error message.
+     * @param {string} error 
+     */
+    displayError(error) {
+        this.error.textContent = error;
+        this.error.style = 'display:block';
+
+        setTimeout(function () {
+            this.error.textContent = '';
+            this.error.style = '';
+        }, 10000);
+    }
+
+    /**
      * Bind form submit.
      * @param {Function} handler 
      */
@@ -243,6 +275,7 @@ class Controller {
         this.view = view;
 
         this.model.bindTodoListChanged(this.onTodoListChanged);
+        this.model.bindHandleError(this.onError);
         this.view.deleteTodoHandler = this.handleDeleteTodo;
         this.view.setCompletedTodoHandler = this.handleSetCompletedTodo;
         this.view.sortTodoHandler = this.handleSortTodo;
@@ -259,6 +292,14 @@ class Controller {
      */
     onTodoListChanged = todos => {
         this.view.displayTodos(todos);
+    }
+
+    /**
+     * Handle error messages.
+     * @param {string} error 
+     */
+    onError = error => {
+        this.view.displayError(error);
     }
 
     /**

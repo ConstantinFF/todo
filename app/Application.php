@@ -2,6 +2,8 @@
 
 namespace Todo;
 
+use Todo\Controllers\Error;
+
 class Application
 {
     /**
@@ -21,7 +23,13 @@ class Application
 
         $request['Router'] = $router;
 
-        return $controller($request);
+        try {
+            return $controller($request);
+        } catch (\Throwable $th) {
+            $error = new Error;
+
+            return $error($th);
+        }
     }
 
     /**

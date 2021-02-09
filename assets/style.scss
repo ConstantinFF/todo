@@ -116,3 +116,18 @@ body {
         border-bottom: 1px solid #dbdbdb;
     }
 }
+
+#error {
+    display: none;
+    padding: 1rem;
+    margin: 1rem;
+    position: fixed;
+    top:0;
+    left: 50%;
+    transform: translateX(-50%);
+
+    background-color: #ff6961;
+
+    border-radius: 1rem;
+    color: #ffffff;
+}

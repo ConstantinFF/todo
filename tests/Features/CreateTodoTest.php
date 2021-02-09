@@ -19,4 +19,9 @@ class CreateTodoTest extends TestCase
 
         $this->assertDatabaseHas('todos', $todo);
     }
+
+    public function testErrorResponse()
+    {
+        $this->assertEqualsCanonicalizing(['error' => 'Title is required'], $this->request('post', '/', []));
+    }
 }

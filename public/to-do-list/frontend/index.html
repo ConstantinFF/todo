@@ -1,16 +1,43 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="utf-8">
-    <title>TO-DO Application</title>
-    <meta name="description" content="TO-DO Application">
-    <link rel="stylesheet" type="text/css" href="./assets/css/style.css">
+  <meta charset="utf-8">
+  <title>TO-DO Application</title>
+  <meta name="description" content="TO-DO Application">
+  <link rel="stylesheet" type="text/css" href="/to-do-list/frontend/assets/css/style.css">
 </head>
 
 <body>
   <div id="root">
+    <div class="container">
 
+      <div class="todo">
+        <header>
+          ToDo List
+        </header>
+        <ul>
+          <li>
+            <input type="checkbox" checked />
+            <div>Task</div>
+            <button class="delete"></button>
+          </li>
+          <li>
+            <input type="checkbox" checked />
+            <div>Task</div>
+            <button class="delete"></button>
+          </li>
+          <li>
+            <form>
+              <button type="submit" class="add">+</button>
+              <input autofocus autocomplete="off" name="title" type="text" />
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
   </div>
-  <script src="./assets/js/script.js" type="text/javascript"></script>
+  <script src="/to-do-list/frontend/assets/js/script.js" type="text/javascript"></script>
 </body>
+
 </html>

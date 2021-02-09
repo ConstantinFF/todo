@@ -1,0 +1,10 @@
+{
+    "private": true,
+    "scripts": {
+        "scss": "sass --watch assets/style.scss public/to-do-list/frontend/assets/css/style.css"
+    },
+    "devDependencies": {},
+    "dependencies": {
+        "sass": "^1.32.6"
+    }
+}

@@ -4,8 +4,11 @@ services:
         image: php:7.4-fpm-alpine
         volumes:
             - ./:/srv
+            - ./assets/script.js:/srv/public/to-do-list/frontend/assets/js/script.js
             - vendor:/srv/vendor:ro
         working_dir: /srv
+        environment:
+            - DATABASE=sqlite:/srv/database/app.sqlite
         ports:
             - "80:80"
         entrypoint: ['php', '-S', '0.0.0.0:80', '-t', 'public/']
@@ -19,5 +22,12 @@ services:
         command: install
         depends_on:
             - php
+    node:
+        image: node:current-alpine
+        volumes:
+            - ./:/srv
+            - /srv/node_modules
+        working_dir: /srv
+        command: sh -c "npm install && npm run scss"
 volumes:
     vendor:

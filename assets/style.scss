@@ -1,0 +1,108 @@
+@import url("https://fonts.googleapis.com/css?family=Lato&display=swap");
+
+$todo-color: #2e3641;
+$done-color: #9eb2c0;
+$text-color: #dae4eb;
+
+.button-reset {
+    font-size: 100%;
+    font-family: inherit;
+    border: 0;
+    cursor: pointer;
+    width: 2.8rem;
+    background-color: inherit;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: #e9f0f4;
+    font-family: Lato;
+}
+
+.container {
+    width: 600px;
+    margin: 20vh auto;
+
+    @media (max-width: 600px) {
+        width: calc(100% - 40px);
+        margin-left: 20px;
+        margin-right: 20px;
+    }
+}
+
+.todo {
+    background-color: #ffffff;
+    width: 100%;
+
+    header {
+        background-color: $todo-color;
+        color: $text-color;
+        padding: 1rem;
+        text-indent: 3rem;
+    }
+
+    ul {
+        margin: 0;
+        padding: 0;
+        list-style-type: none;
+        color: $todo-color;
+
+        border: 1px solid #dbdbdb;
+
+        li {
+            display: flex;
+
+            border-bottom: 1px solid #e6ebed;
+
+            div {
+                display: inline-block;
+                flex-grow: 1;
+                margin: 1rem;
+            }
+        }
+    }
+
+    button.delete {
+        @extend .button-reset;
+
+        background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14'><path id='trash kopia 4 copy' fill-rule='evenodd' class='shp0' d='M1 3L3 3L3 1L10 1L10 3L12 3L12 4L11 4L11 12C11 12.55 10.6 13 10.1 13L2.9 13C2.4 13 2 12.55 2 12L2 4L1 4L1 3ZM9 2L4 2L4 3L9 3L9 2ZM4 11L5 11L5 5L4 5L4 11ZM6 11L7 11L7 5L6 5L6 11ZM8 11L9 11L9 5L8 5L8 11Z' /></svg>");
+        background-repeat: no-repeat;
+        background-size: 1rem 1rem;
+        background-position: center;
+    }
+
+    button.add {
+        @extend .button-reset;
+
+        font-weight: bolder;
+        color: $text-color;
+        font-size: 2rem;
+        line-height: 3rem;
+        vertical-align: middle;
+    }
+
+    input[type="text"] {
+        border: none;
+        vertical-align: middle;
+        flex-grow: 1;
+        padding: 1rem;
+        color: $todo-color;
+
+        &:focus {
+            outline: none;
+        }
+    }
+
+    input[type="checkbox"] {
+        margin: 1.2rem;
+        &:checked + div {
+            text-decoration: line-through;
+            color: $done-color;
+        }
+    }
+}

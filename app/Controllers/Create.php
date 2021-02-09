@@ -16,7 +16,7 @@ class Create
     public function __invoke($request)
     {
         $attributes = (array) filter_var_array($request, [
-            'title' => FILTER_SANITIZE_ENCODED,
+            'title' => FILTER_SANITIZE_STRING,
         ]);
 
         $this->validate($attributes);

@@ -9,7 +9,7 @@ use Todo\Support\Database;
 class Model
 {
     /**
-     * List all database records.
+     * Return list of all database records.
      *
      * @param array $options
      * @return array
@@ -17,25 +17,18 @@ class Model
     public static function all($options = [])
     {
         return Database::getConnection()
-            ->query(sprintf('SELECT * FROM %s %s', static::$table, Query::orderQuery($options['orderBy'] ?? null)))
+            ->query(Query::findAll(static::$table, $options))
             ->fetchAll(PDO::FETCH_CLASS, static::class);
     }
 
     /**
-     * Create database record.
+     * Create database record. And return it from DB.
      *
      * @param array $attributes
      * @return self
      */
     public static function create($attributes = [])
     {
-        $query = sprintf(
-            'INSERT INTO %s (%s) VALUES (%s)',
-            static::$table,
-            Query::insertFieldsQuery($attributes),
-            Query::insertFieldsQuery($attributes, true)
-        );
-
         Database::getConnection()
             ->prepare(Query::insertNewRecord(static::$table, $attributes))
             ->execute($attributes);
@@ -44,7 +37,7 @@ class Model
     }
 
     /**
-     * Find record by id
+     * Find record by id.
      *
      * @param int $id
      * @return self
@@ -59,7 +52,7 @@ class Model
     }
 
     /**
-     * Find first record
+     * Find first record.
      *
      * @param array $options
      * @return self
@@ -73,19 +66,50 @@ class Model
         return $db->fetch(PDO::FETCH_CLASS);
     }
 
+    /**
+     * Save current record.
+     *
+     * @return boolean
+     */
     public function save()
     {
         $data = (array) $this;
 
         return Database::getConnection()
-            ->prepare(sprintf(
-                'UPDATE %s SET %s WHERE id=:id',
-                static::$table,
-                self::updateFieldsQuery($data)
-            ))
+            ->prepare(Query::updateRecord(static::$table, $data))
             ->execute($data);
     }
 
+    /**
+     * Delete current record.
+     *
+     * @return boolean
+     */
+    public function delete()
+    {
+        return Database::getConnection()
+            ->prepare(Query::deleteRecord(static::$table))
+            ->execute(['id' => $this->id]);
+    }
+
+    /**
+     * Update sort fields.
+     *
+     * @param array $sort
+     * @return boolean
+     */
+    public function updateSort($sort)
+    {
+        return Database::getConnection()
+            ->prepare(Query::sortRecords(static::$table, $sort))
+            ->execute();
+    }
+
+    /**
+     * Serialize model into array of current object.
+     *
+     * @return array
+     */
     public function __serialize(): array
     {
         return $this;

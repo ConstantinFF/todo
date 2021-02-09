@@ -17,6 +17,6 @@
     </testsuite>
   </testsuites>
   <php>
-    <env name="DATABASE" value="sqlite::memory:"/>
+    <env name="DATABASE" value="sqlite::memory:" force="true"/>
   </php>
 </phpunit>

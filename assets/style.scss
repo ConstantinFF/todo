@@ -26,7 +26,7 @@ body {
 
 .container {
     width: 600px;
-    margin: 20vh auto;
+    margin: 20vh auto 0 auto;
 
     @media (max-width: 600px) {
         width: calc(100% - 40px);
@@ -52,7 +52,8 @@ body {
         list-style-type: none;
         color: $todo-color;
 
-        border: 1px solid #dbdbdb;
+        border-left: 1px solid #dbdbdb;
+        border-right: 1px solid #dbdbdb;
 
         li {
             display: flex;
@@ -63,6 +64,7 @@ body {
                 display: inline-block;
                 flex-grow: 1;
                 margin: 1rem;
+                pointer-events: none;
             }
         }
     }
@@ -104,5 +106,13 @@ body {
             text-decoration: line-through;
             color: $done-color;
         }
+    }
+
+    form {
+        display: flex;
+
+        border-left: 1px solid #dbdbdb;
+        border-right: 1px solid #dbdbdb;
+        border-bottom: 1px solid #dbdbdb;
     }
 }

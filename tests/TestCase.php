@@ -19,6 +19,13 @@ class TestCase extends BaseTestCase
         parent::setUp();
     }
 
+    protected function tearDown(): void
+    {
+        Database::closeConnection();
+
+        parent::tearDown();
+    }
+
     protected function request($method, $path, $data = [])
     {
         $server = [
@@ -26,17 +33,22 @@ class TestCase extends BaseTestCase
             'PATH_INFO' => $path,
         ];
 
-        return (array) $this->app
-            ->handle($server, $data)
-            ->body();
+        return json_decode(json_encode(
+            $this->app->handle($server, $data)->body()
+        ), true);
     }
 
-    protected function assertDatabaseHas($table, array $data)
+    protected function assertDatabaseHas($table, array $data, $count = 1)
     {
         $db = Database::getConnection()
             ->prepare(sprintf('SELECT COUNT(*) FROM %s WHERE %s', $table, Query::whereAnd($data)));
         $db->execute($data);
 
-        return $this->assertEquals(1, $db->fetchColumn());
+        return $this->assertEquals($count, $db->fetchColumn());
+    }
+
+    protected function assertDatabaseMissing($table, array $data)
+    {
+        return $this->assertDatabaseHas($table, $data, 0);
     }
 }

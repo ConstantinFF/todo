@@ -49,6 +49,18 @@ class Query
         return sprintf('SELECT * FROM %s WHERE id=?', $table);
     }
 
+    /**
+     * SQL query for search record by id
+     *
+     * @param array $attributes
+     * @param bool $isValue
+     * @return string
+     */
+    public static function findAll($table, $options): string
+    {
+        return sprintf('SELECT * FROM %s %s', $table, Query::orderQuery($options['orderBy'] ?? null));
+    }
+
     public static function whereAnd($attributes): string
     {
         $fields = array_keys($attributes);
@@ -56,6 +68,40 @@ class Query
         $queryFields = array_map(fn ($field) => "{$field}=:{$field}", $fields);
 
         return implode(' AND ', $queryFields);
+    }
+
+    public static function deleteRecord($table): string
+    {
+        return sprintf(
+            'DELETE FROM %s WHERE id=:id',
+            $table
+        );
+    }
+
+    public static function sortRecords($table, $sort): string
+    {
+        $i = 0;
+
+        $sortQuery = array_reduce($sort, function ($carry, $id) use (&$i) {
+            $i++;
+
+            return $carry . " WHEN id = {$id} THEN {$i}";
+        });
+
+        return sprintf(
+            'UPDATE %s SET sort = CASE %s END WHERE 1',
+            $table,
+            $sortQuery
+        );
+    }
+
+    public static function updateRecord($table, $attributes): string
+    {
+        return sprintf(
+            'UPDATE %s SET %s WHERE id=:id',
+            $table,
+            self::updateFieldsQuery($attributes)
+        );
     }
 
     public static function updateFieldsQuery($attributes): string

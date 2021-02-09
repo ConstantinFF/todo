@@ -11,6 +11,11 @@ class Response
         $this->body = $body;
     }
 
+    /**
+     * Set response headers and return response body as json.
+     *
+     * @return string
+     */
     public function toJson()
     {
         header('Content-Type: application/json');
@@ -18,11 +23,21 @@ class Response
         return json_encode($this->body);
     }
 
+    /**
+     * Handle responce as a string.
+     *
+     * @return string
+     */
     public function __toString() : string
     {
         return $this->toJson();
     }
 
+    /**
+     * Return Response body.
+     *
+     * @return mixed
+     */
     public function body()
     {
         return $this->body;

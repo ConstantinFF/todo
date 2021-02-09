@@ -3,40 +3,42 @@
 
 <head>
   <meta charset="utf-8">
-  <title>TO-DO Application</title>
-  <meta name="description" content="TO-DO Application">
+  <title>ToDo List</title>
+  <meta name="description" content="ToDo List">
   <link rel="stylesheet" type="text/css" href="/to-do-list/frontend/assets/css/style.css">
 </head>
 
 <body>
-  <div id="root">
-    <div class="container">
-
-      <div class="todo">
-        <header>
-          ToDo List
-        </header>
-        <ul>
-          <li>
-            <input type="checkbox" checked />
-            <div>Task</div>
-            <button class="delete"></button>
-          </li>
-          <li>
-            <input type="checkbox" checked />
-            <div>Task</div>
-            <button class="delete"></button>
-          </li>
-          <li>
-            <form>
-              <button type="submit" class="add">+</button>
-              <input autofocus autocomplete="off" name="title" type="text" />
-            </form>
-          </li>
-        </ul>
-      </div>
+  <div class="container">
+    <div class="todo">
+      <header>
+        ToDo List
+      </header>
+      <ul id="todos">
+        <li>
+          <input type="checkbox" checked />
+          <div>Task</div>
+          <button class="delete"></button>
+        </li>
+        <li>
+          <input type="checkbox" checked />
+          <div>Task</div>
+          <button class="delete"></button>
+        </li>
+      </ul>
+      <form id="add-todo">
+        <button type="submit" class="add">+</button>
+        <input autofocus autocomplete="off" required name="title" type="text" />
+      </form>
     </div>
   </div>
+  <template id="todo-row">
+    <li draggable="true">
+      <input type="checkbox" />
+      <div></div>
+      <button class="delete"></button>
+    </li>
+  </template>
   <script src="/to-do-list/frontend/assets/js/script.js" type="text/javascript"></script>
 </body>
 

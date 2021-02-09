@@ -4,7 +4,6 @@ namespace Todo;
 
 class Application
 {
-
     /**
      * Handle application request
      *
@@ -15,7 +14,7 @@ class Application
     public function handle(array $server, array $request)
     {
         if ($server['REQUEST_METHOD'] === 'PUT') {
-            parse_str(file_get_contents('php://input'), $request);
+            $request += json_decode(file_get_contents('php://input'), true);
         }
 
         [$controller, $router] = $this->getController($server);

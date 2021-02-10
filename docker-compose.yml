@@ -11,7 +11,9 @@ services:
             - DATABASE=sqlite:/srv/database/app.sqlite
         ports:
             - "80:80"
-        entrypoint: ['php', '-S', '0.0.0.0:80', '-t', 'public/']
+        command: sh -c "
+            chown -R www-data:www-data public/
+            && php -S 0.0.0.0:80 -t public/"
     composer:
         image: composer:latest
         volumes:

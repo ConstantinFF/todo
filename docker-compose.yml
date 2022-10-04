@@ -11,9 +11,7 @@ services:
             - DATABASE=sqlite:/srv/database/app.sqlite
         ports:
             - "80:80"
-        command: sh -c "
-            chown -R www-data:www-data public/
-            && php -S 0.0.0.0:80 -t public/"
+        entrypoint: [ 'php', '-S', '0.0.0.0:80', '-t', 'public/' ]
     composer:
         image: composer:latest
         volumes:
@@ -21,7 +19,7 @@ services:
             - vendor:/srv/vendor
             - ${HOME}/.composer:/tmp
         working_dir: /srv
-        command: install
+        command: install --ignore-platform-reqs
         depends_on:
             - php
     node:
